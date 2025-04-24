@@ -296,6 +296,7 @@ All the elements / symbols / colors can be easily customized by override theme v
 Thses variables designed for customization:
 - [`JOVIAL_SYMBOL`](#symbols)
 - [`JOVIAL_PALETTE`](#colors)
+- [`JOVIAL_LOGIC`](#logic)
 - [`JOVIAL_PROMPT_ORDER`](#order-of-parts)
 - [`JOVIAL_PROMPT_PRIORITY`](#priority-of-parts)
 - [`JOVIAL_AFFIXES`](#affixes)
@@ -415,6 +416,27 @@ it will looks like:
   <img alt="color sheet" src="https://user-images.githubusercontent.com/15135943/143198898-2cf1225c-47e4-4860-95db-2dc29ad1436e.png" width="800">
 </p>
 
+### Logic
+
+All the default symbols defined list that:
+
+```zsh
+JOVIAL_LOGIC=(
+    clock.format '%H:%M:%S'
+)
+```
+
+You can override logic by assign the variable with key in `JOVIAL_LOGIC`, such as time:
+
+```zsh
+# ~/.zshrc
+
+# 24 hour format (default)
+JOVIAL_SYMBOL[clock.format]='%H:%M:%S'
+
+# 12 hour format
+JOVIAL_SYMBOL[clock.format]='%I:%M:%S %p'
+```
 
 ### order of parts
 

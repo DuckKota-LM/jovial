@@ -45,6 +45,11 @@ fi
 # "%{ %}" is escape values in Prompt-Expansion (vcs_info style) (for used in `print -P`)
 typeset -g sgr_reset="%{\e[00m%}"
 
+# jovial theme logic mapping
+# this logic lets users customize the prompt logic
+typeset -gA JOVIAL_LOGIC=(
+    clock.format '%H:%M:%S'
+)
 
 # jovial theme element symbol mapping
 #
@@ -584,11 +589,16 @@ typeset -gA jovial_affix_lengths=()
 
 @jov.set-date-time() {
     # trimming suffix trailing whitespace
-    # donot print trailing whitespace for better interaction while terminal width in narrowing
+    # do not print trailing whitespace for better interaction while terminal width in narrowing
     local suffix="${(MS)JOVIAL_AFFIXES[current-time.suffix]##*[[:graph:]]}"
-    local current_time="${JOVIAL_AFFIXES[current-time.prefix]}${JOVIAL_PALETTE[time]}${(%):-%D{%H:%M:%S\}}${suffix}"
-    # 8 is fixed lenght of datatime format `hh:mm:ss`
-    jovial_part_lengths[current-time]=$(( 8 + ${jovial_affix_lengths[current-time]} ))
+
+    # Generate the current_time string using the user defined format
+    # Then generate the length of the string dynamically
+    local current_time="${JOVIAL_AFFIXES[current-time.prefix]}${JOVIAL_PALETTE[time]}${(%):-%D{${JOVIAL_LOGIC[clock.format]}\}}${suffix}"
+    local current_time_len=$(print "${#${(%):-%D{${JOVIAL_LOGIC[clock.format]}\}}}")
+    jovial_part_lengths[current-time]=$(( ${current_time_len} + ${jovial_affix_lengths[current-time]} ))
+
+    # align current time to right
     @jov.align-right "${current_time}" ${jovial_part_lengths[current-time]} 'jovial_parts[current-time]'
 }
 
